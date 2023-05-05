@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Google Reviews Search</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALjZnK1kD-2XA-Viej3K9k0OSC1QbPmJY&libraries=places"></script>
+    <script>
+      function initAutocomplete() {
+        var input = document.getElementById('search-input');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.addListener('place_changed', function() {
+          var place = autocomplete.getPlace();
+          if (place.place_id) {
+            getReviews(place.place_id);
+          }
+        });
+      }
+
+      function getReviews(place_id) {
+        var request = {
+          placeId: place_id,
+          fields: ['name', 'rating', 'formatted_phone_number', 'reviews']
+        };
+        var service = new google.maps.places.PlacesService(document.createElement('div'));
+        service.getDetails(request, function(place, status) {
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+            var reviews = place.reviews;
+            if (reviews) {
+              var reviewsContainer = document.getElementById('reviews-container');
+              reviewsContainer.innerHTML = '';
+              for (var i = 0; i < reviews.length; i++) {
+                var review = reviews[i];
+                var reviewDiv = document.createElement('div');
+                reviewDiv.innerHTML = '<p><strong>Rating:</strong> ' + review.rating + '</p><p><strong>Author:</strong> ' + review.author_name + '</p><p><strong>Text:</strong> ' + review.text + '</p>';
+                reviewsContainer.appendChild(reviewDiv);
+              }
+            }
+          }
+        });
+      }
+    </script>
+    <style>
+      #search-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      #search-input {
+        width: 300px;
+        padding: 10px;
+        font-size: 16px;
+      }
+
+      #search-button {
+        padding: 10px;
+        margin-left: 10px;
+        font-size: 16px;
+      }
+
+      #reviews-container {
+        margin-top: 20px;
+      }
+
+      .review {
+        margin-bottom: 20px;
+      }
+
+      .review p {
+        margin: 0;
+      }
+
+      .review strong {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body onload="initAutocomplete()">
+    <div id="search-box">
+      <input id="search-input" type="text" placeholder="Enter a restaurant name">
+      <button id="search-button" onclick="getReviews()">Search</button>
+    </div>
+    <div id="reviews-container"></div>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Rare Animal Sighting</title>
+    <!-- <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    /> -->
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cabin+Sketch&family=Edu+NSW+ACT+Foundation:wght@600&family=Exo+2:ital,wght@1,300&display=swap" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+
+    <script type="text/javascript" src="../static/js/leaflet-heat.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h1>Rare Sightings in NSW</h1>
+          <p>Use the dropdown menu below to select an animal:</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <div class="text-center">
+            <select id="selDataset">
+              <option value="" disabled selected>Choose an animal</option>
+            </select>
+            <div class="row">
+              <div class="col-md-12">
+                <h2>Sighting!</h2>
+                <p id="totalSightings">
+                  Total sightings will be displayed here after an animal is
+                  selected
+                </p>
+                <div class="map-container">
+                  <div id="map-plot"></div>
+                  <div id="myChart"></div>
+                  <div class="gauge">
+                    <div class="chartBox2">
+                      <canvas id="gauge"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row"></div>
+    </div>
+    <div class="button-container">
+      <h3><a href="/send">Add your sightings here!</a></h3>
+    </div>
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"
+    ></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../static/js/app.js"></script>
+    <!-- <script src="../static/js/map.js"></script> -->
+    <!-- <script src="../static/js/bar.js"></script> -->
+    <!-- <script src="../static/js/gauge.js"></script> -->
+  </body>
+</html>

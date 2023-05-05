@@ -1,0 +1,1 @@
+FLASK_APP=review_program/app.py flask run
