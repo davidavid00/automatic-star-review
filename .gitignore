@@ -159,3 +159,4 @@ cython_debug/
 #.idea/
 reinier/.DS_Store
 reinier/yelp_dataset/.DS_Store
+.DS_Store
