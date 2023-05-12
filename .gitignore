@@ -173,3 +173,8 @@ reinier/extract_data.ipynb
 reinier/extract_data.ipynb
 reinier/emolex_classifier.ipynb
 reinier/reviews_restaurants.csv
+reinier/data/reviews_restaurants.csv
+reinier/data/vader_emolex_rest.csv
+reinier/data/vader_emolex_rest.json
+reinier/data/vader_newstar_df.csv
+reinier/data/vader_newstar_df.json
