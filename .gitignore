@@ -167,3 +167,9 @@ reinier/yelp_dataset/yelp_academic_dataset_review.json
 reinier/yelp_dataset/yelp_academic_dataset_business.json
 reinier/yelp_dataset/yelp_academic_dataset_business.json
 reinier/yelp_dataset/yelp_academic_dataset_review.json
+reinier/data/yelp_dataset/yelp_academic_dataset_business.json
+reinier/data/yelp_dataset/yelp_academic_dataset_review.json
+reinier/extract_data.ipynb
+reinier/extract_data.ipynb
+reinier/emolex_classifier.ipynb
+reinier/reviews_restaurants.csv
