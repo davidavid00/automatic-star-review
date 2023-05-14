@@ -179,3 +179,5 @@ reinier/data/vader_emolex_rest.json
 reinier/data/vader_newstar_df.csv
 reinier/data/vader_newstar_df.json
 reinier/data/yelp_dataset/yelp_academic_dataset_business.csv
+.idea/automatic-star-review.iml
+*.xml
