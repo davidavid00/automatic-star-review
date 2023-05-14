@@ -181,3 +181,11 @@ reinier/data/vader_newstar_df.json
 reinier/data/yelp_dataset/yelp_academic_dataset_business.csv
 .idea/automatic-star-review.iml
 *.xml
+reinier/working_files/test.ipynb
+reinier/working_files/test2.ipynb
+reinier/working_files/test_svm_joblib.ipynb
+reinier/test_svm_joblib.ipynb
+reinier/learning_models/model.joblib
+reinier/learning_models/model_ls.joblib
+reinier/learning_models/model_rf.joblib
+reinier/learning_models/model_svm.joblib
