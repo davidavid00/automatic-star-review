@@ -6,29 +6,31 @@ from nltk.corpus import stopwords
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 sid = SentimentIntensityAnalyzer()
-import numpy as np
-from os import path
+from nltk.tokenize import word_tokenize
 
-
-
-# UNCOMMENT THE BELOW FOR YOUR FIRST TIME RUN
-# import nltk
-# nltk.download('stopwords')
-
-
-
+import os
+from joblib import load
+import warnings
+warnings.filterwarnings("ignore")
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from flask import (
     Flask,
     jsonify,
     render_template,
     request,
     redirect)
+# UNCOMMENT THE BELOW FOR YOUR FIRST TIME RUN
+# import nltk
+# nltk.download('stopwords')
+# nltk.download('punkt')
 
-from joblib import load
 
-import os
-dynamic_fp = os.path.abspath('review_program/dynamic')
+
+
+dynamic_fp = os.path.abspath('review_program/static/assets/img')
 print(dynamic_fp)
 # os.environ["FLASK_DEBUG"] = "1"
 
@@ -48,14 +50,7 @@ emolex_df = emolex_df[emolex_df.association == 1]
 emolex_words = emolex_df.pivot(index='word', columns='emotion', values='association')
 emolex_words = emolex_words.reset_index()
 
-#Function for each document
-def emolex(text):
-    text = text.translate(str.maketrans('', '', string.punctuation)).lower()
-    words = text.split()
-    stop_words = set(stopwords.words('english'))
-    words = [word for word in words if word not in stop_words]
-    emotions_count = emolex_words[emolex_words.word.isin(words)].sum()
-    return emotions_count
+
 
 
 # Prediction Route
@@ -80,6 +75,7 @@ def get_reviews():
     json_string = json.dumps(reviews)
     json_list = json.loads(json_string)
     print(json_list)
+
     documents = []
     for review in json_list:
         documents.append(review['text'])
@@ -104,6 +100,37 @@ def get_reviews():
     # Process the reviews data as needed
     return jsonify({'success': True})
 
+# Word Cloud Setup
+stop_words = stopwords.words('english') + ["'ve", "'re", "'s", "'m", "'ll", "'d", "n't", "'u", "u"]
+
+# Function for removing stopwords
+def remove_part_words(text):
+    # Tokenize the text into words
+    words = word_tokenize(text)
+
+    # Iterate through each word
+    filtered_words = []
+    for word in words:
+        if word.lower() not in stop_words:
+            if "'" in word:
+                word_parts = word.split("'")
+                filtered_words.append(word_parts[0])
+            else:
+                filtered_words.append(word)
+    
+    # Join the filtered words back into a single string
+    filtered_text = ' '.join(filtered_words)
+    
+    return filtered_text
+
+# Function to be called to calculate the emotional data for graphs
+def emolex(text):
+    text = text.translate(str.maketrans('', '', string.punctuation)).lower()
+    words = text.split()
+    stop_words = set(stopwords.words('english'))
+    words = [word for word in words if word not in stop_words]
+    emotions_count = emolex_words[emolex_words.word.isin(words)].sum()
+    return emotions_count,words
 
 # from flask_sqlalchemy import SQLAlchemy
 # 'or' allows us to later switch from 'sqlite' to an external database like 'postgres' easily

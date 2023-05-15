@@ -114,12 +114,6 @@ function updateTitle(value) {
   modalTitle.textContent = "Your review was considered " + value;
 }
 
-
-
-
-
-
-
 //Function to send textarea data to flask
 // function test_func () {
 //   let input_data = document.getElementById('review_input').value;
