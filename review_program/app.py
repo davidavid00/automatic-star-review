@@ -1,5 +1,15 @@
 # import necessary libraries
-# import os
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import string
+import pandas as pd
+from nltk.corpus import stopwords
+import json
+import pandas as pd
+import matplotlib.pyplot as plt
+sid = SentimentIntensityAnalyzer()
+import nltk
+nltk.download('stopwords')
+
 from flask import (
     Flask,
     jsonify,
@@ -10,7 +20,7 @@ from flask import (
 from joblib import load
 
 import os
-os.environ["FLASK_DEBUG"] = "1"
+# os.environ["FLASK_DEBUG"] = "1"
 
 #################################################
 # Machine Learning Setup
@@ -22,8 +32,23 @@ vectorizer = load('review_program/static/joblib/vectorizer_LR.joblib')
 #################################################
 app = Flask(__name__)
 
-# Prediction Route
+#Setup the emolex dataframe
+emolex_df = pd.read_csv('reinier/data/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt', sep='\t', names=['word', 'emotion','association'])
+emolex_df = emolex_df[emolex_df.association == 1]
+emolex_words = emolex_df.pivot(index='word', columns='emotion', values='association')
+emolex_words = emolex_words.reset_index()
 
+#Function for each document
+def emolex(text):
+    text = text.translate(str.maketrans('', '', string.punctuation)).lower()
+    words = text.split()
+    stop_words = set(stopwords.words('english'))
+    words = [word for word in words if word not in stop_words]
+    emotions_count = emolex_words[emolex_words.word.isin(words)].sum()
+    return emotions_count
+
+
+# Prediction Route
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
     try:
@@ -42,7 +67,28 @@ def predict():
 @app.route('/graphs', methods=['POST'])
 def get_reviews():
     reviews = request.get_json()
-    print(reviews)
+    json_string = json.dumps(reviews)
+    json_list = json.loads(json_string)
+    documents = []
+    for review in json_list:
+        documents.append(review['text'])
+    
+    emotions_output = []
+    for doc in documents:
+        emotions_count = emolex(doc)
+        emotions_output.append(emotions_count)
+    emolex_df = pd.DataFrame(emotions_output)
+    
+    if emolex_df.empty:
+        return jsonify({'success': False, 'message': 'No emotions found.'})
+    
+    ax = emolex_df.plot(kind='bar', stacked=True, figsize=(10, 6))
+    ax.set_title('Emotion Counts')
+    ax.set_xlabel('Emotion')
+    ax.set_ylabel('Count')
+    ax.legend(loc='upper right')
+    plt.tight_layout()
+    plt.savefig('emotions.png')
     # Process the reviews data as needed
     return jsonify({'success': True})
 
