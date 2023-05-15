@@ -2,19 +2,50 @@
 # import os
 from flask import (
     Flask,
-    render_template)
-    # jsonify,
-    # request,
-    # redirect)
+    jsonify,
+    render_template,
+    request,
+    redirect)
 
+from joblib import load
+
+import os
+os.environ["FLASK_DEBUG"] = "1"
+
+#################################################
+# Machine Learning Setup
+#################################################
+model = load('review_program/static/joblib/model_lr.joblib')
+vectorizer = load('review_program/static/joblib/vectorizer_LR.joblib')
 #################################################
 # Flask Setup
 #################################################
 app = Flask(__name__)
 
-#################################################
-# Database Setup
-#################################################
+# Prediction Route
+
+@app.route('/predict', methods=['GET', 'POST'])
+def predict():
+    try:
+        data = request.get_data(as_text=True)  # get the input data as a string
+        print('Received data:', data)
+        data_vectorized = vectorizer.transform([data])  # vectorize the data
+        prediction = model.predict(data_vectorized)[0]  # make a prediction
+        sentiment_label = ['negative', 'neutral', 'positive'][prediction]
+        return jsonify({'prediction': sentiment_label})  # return the prediction as a JSON object
+    except Exception as e:
+        print('Error:', e)
+        return jsonify({'success': False, 'error': str(e)})
+
+
+# Graphs for dashboard
+@app.route('/graphs', methods=['POST'])
+def get_reviews():
+    reviews = request.get_json()
+    print(reviews)
+    # Process the reviews data as needed
+    return jsonify({'success': True})
+
 
 # from flask_sqlalchemy import SQLAlchemy
 # 'or' allows us to later switch from 'sqlite' to an external database like 'postgres' easily
@@ -62,7 +93,7 @@ app = Flask(__name__)
 # below is an example to get you started...
 
 # create route that renders index.html template
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def home():
     return render_template("test.html")
 
