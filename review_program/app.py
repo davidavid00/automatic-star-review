@@ -7,8 +7,16 @@ import json
 import pandas as pd
 import matplotlib.pyplot as plt
 sid = SentimentIntensityAnalyzer()
-import nltk
-nltk.download('stopwords')
+import numpy as np
+from os import path
+
+
+
+# UNCOMMENT THE BELOW FOR YOUR FIRST TIME RUN
+# import nltk
+# nltk.download('stopwords')
+
+
 
 from flask import (
     Flask,
@@ -20,6 +28,8 @@ from flask import (
 from joblib import load
 
 import os
+dynamic_fp = os.path.abspath('review_program/dynamic')
+print(dynamic_fp)
 # os.environ["FLASK_DEBUG"] = "1"
 
 #################################################
@@ -69,6 +79,7 @@ def get_reviews():
     reviews = request.get_json()
     json_string = json.dumps(reviews)
     json_list = json.loads(json_string)
+    print(json_list)
     documents = []
     for review in json_list:
         documents.append(review['text'])
@@ -78,6 +89,7 @@ def get_reviews():
         emotions_count = emolex(doc)
         emotions_output.append(emotions_count)
     emolex_df = pd.DataFrame(emotions_output)
+    print(emolex_df)
     
     if emolex_df.empty:
         return jsonify({'success': False, 'message': 'No emotions found.'})
@@ -88,7 +100,7 @@ def get_reviews():
     ax.set_ylabel('Count')
     ax.legend(loc='upper right')
     plt.tight_layout()
-    plt.savefig('emotions.png')
+    plt.savefig(os.path.join(dynamic_fp, 'emotions.png'))
     # Process the reviews data as needed
     return jsonify({'success': True})
 

@@ -39,12 +39,10 @@ document.getElementById("popup-btn").addEventListener("click", function() {
 //Page submission function
 
 const form = document.getElementById('myForm');
-const loader = document.getElementById('loader');
 const result = document.getElementById('result');
 
 form.addEventListener('submit', (event) => {
   event.preventDefault(); // Prevent the page from reloading
-  loader.style.display = 'block'; //loading gif
   let input_data = document.getElementById('review_input').value;
   console.log(input_data);
   
@@ -65,8 +63,12 @@ form.addEventListener('submit', (event) => {
   })
   .then((response) => response.text())
   .then(data => {
-    loader.style.display = 'none';
-    console.log(data);
+    // Update the modal title with the returned value
+    var sentiment = JSON.parse(data)
+    console.log(typeof sentiment);
+    var sentiment_response = sentiment['prediction'];
+    console.log(sentiment_response);
+    updateTitle(sentiment_response);
   });
   
   //send reviews to create matplotlib graphs
@@ -102,6 +104,21 @@ const closeBtn = document.querySelector(".close");
 closeBtn.addEventListener("click", function() {
   popup.style.display = "none";
 });
+
+// Function to update modal content
+function updateTitle(value) {
+  // Get the modal header element
+  var modalTitle = document.querySelector('.modal-title');
+
+  // Replace the text content of the modal title
+  modalTitle.textContent = "Your review was considered " + value;
+}
+
+
+
+
+
+
 
 //Function to send textarea data to flask
 // function test_func () {
