@@ -27,11 +27,36 @@ from flask import (
 # nltk.download('stopwords')
 # nltk.download('punkt')
 
+# import importlib
+
+# def check_dependencies():
+#     try:
+#         importlib.import_module('wordcloud')
+#     except ImportError:
+#         install_wordcloud()
+
+# def install_wordcloud():
+#     try:
+#         import pip
+#     except ImportError:
+#         print("pip is not installed. Please install pip and try again.")
+#         return
+
+#     try:
+#         pip.main(['install', 'wordcloud'])
+#     except Exception as e:
+#         print("An error occurred while installing wordcloud:", e)
+#         return
+
+#     print("wordcloud successfully installed.")
+
+# # Check if wordcloud is installed
+# check_dependencies()
 
 
 
-dynamic_fp = os.path.abspath('review_program/static/assets/img')
-print(dynamic_fp)
+
+
 # os.environ["FLASK_DEBUG"] = "1"
 
 #################################################
@@ -50,6 +75,16 @@ emolex_df = emolex_df[emolex_df.association == 1]
 emolex_words = emolex_df.pivot(index='word', columns='emotion', values='association')
 emolex_words = emolex_words.reset_index()
 
+#Filepath for image assets
+dynamic_fp = os.path.abspath('review_program/static/assets/img')
+
+# Create route that renders index.html template
+@app.route("/", methods=['GET', 'POST'])
+def home():
+    return render_template("test.html")
+
+# Word Cloud Setup
+stop_words = stopwords.words('english') + ["'ve", "'re", "'s", "'m", "'ll", "'d", "n't", "'u", "u"]
 
 
 
@@ -74,7 +109,8 @@ def get_reviews():
     reviews = request.get_json()
     json_string = json.dumps(reviews)
     json_list = json.loads(json_string)
-    print(json_list)
+    df = pd.json_normalize(json_list)
+    print(df)
 
     documents = []
     for review in json_list:
@@ -97,11 +133,23 @@ def get_reviews():
     ax.legend(loc='upper right')
     plt.tight_layout()
     plt.savefig(os.path.join(dynamic_fp, 'emotions.png'))
+
+    #Create Wordcloud
+    df['text'] = df['text'].apply(remove_part_words)
+    text = ' '.join(df['text'])
+
+    # Create and generate a word cloud image:
+    wordcloud = WordCloud(background_color='white').generate(text)
+
+    # Display the generated image
+    plt.clf()
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+    plt.savefig(os.path.join(dynamic_fp, 'wordcloud.png'), bbox_inches='tight')
+
     # Process the reviews data as needed
     return jsonify({'success': True})
 
-# Word Cloud Setup
-stop_words = stopwords.words('english') + ["'ve", "'re", "'s", "'m", "'ll", "'d", "n't", "'u", "u"]
 
 # Function for removing stopwords
 def remove_part_words(text):
@@ -116,7 +164,7 @@ def remove_part_words(text):
                 word_parts = word.split("'")
                 filtered_words.append(word_parts[0])
             else:
-                filtered_words.append(word)
+                filtered_words.append(word.lower())
     
     # Join the filtered words back into a single string
     filtered_text = ' '.join(filtered_words)
@@ -130,7 +178,7 @@ def emolex(text):
     stop_words = set(stopwords.words('english'))
     words = [word for word in words if word not in stop_words]
     emotions_count = emolex_words[emolex_words.word.isin(words)].sum()
-    return emotions_count,words
+    return emotions_count
 
 # from flask_sqlalchemy import SQLAlchemy
 # 'or' allows us to later switch from 'sqlite' to an external database like 'postgres' easily
@@ -177,10 +225,7 @@ def emolex(text):
 # you can add as many html pages as you need
 # below is an example to get you started...
 
-# create route that renders index.html template
-@app.route("/", methods=['GET', 'POST'])
-def home():
-    return render_template("test.html")
+
 
 
 # Query the database and send the jsonified results

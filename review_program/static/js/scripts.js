@@ -84,12 +84,31 @@ form.addEventListener('submit', (event) => {
           },
           body: JSON.stringify(reviews)
         })
-        .then(function(response) {
-          if (response.ok) {
-            console.log('Reviews sent to Flask instance.');
-          } else {
-            console.error('Error sending reviews to Flask instance.');
-          }
+        .then(response => response.json())
+        .then(data=> {
+          // Get the reference to the input boxes and modal body
+          const restaurantNameInput = document.getElementById('restaurant_name');
+          const placeIdInput = document.getElementById('place-id');
+          const review_html = document.getElementById('review_input');
+          const modalBody = document.querySelector('.modal-body');
+          const submit_button = document.getElementById('submitButton');
+
+          // Create image elements
+          const image1 = document.createElement('img');
+          image1.src = "emotions.png";
+          image1.alt = 'Image 1';
+
+          const image2 = document.createElement('img');
+          image2.src = "emotions.png"; //to update with wordcloud
+          image2.alt = 'Image 2';
+
+          restaurantNameInput.remove();  // Remove restaurantNameInput element
+          placeIdInput.remove();         // Remove placeIdInput element
+          review_html.remove();
+          submit_button.remove();
+          modalBody.insertAdjacentHTML('beforebegin', '<img id="graph" src="../static/assets/img/emotions.png" alt="..." />');
+          modalBody.insertAdjacentHTML('beforebegin', '<img id="graph" src="../static/assets/img/wordcloud.png" alt="..." />'); //image2
+          modalBody.value
         })
         .catch(function(error) {
           console.error('Error sending reviews to Flask instance:', error);

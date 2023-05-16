@@ -10958,9 +10958,9 @@ footer.footer {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  max-width: 800px;
-  height: 30vh;
-  width: 50vh; 
+  max-width: 1000px;
+  height: 40vh;
+  width: 70vh; 
 }
 
 #popup .modal-header {
@@ -10976,4 +10976,7 @@ textarea {
 }
 .pac-container {
   z-index: 9999 !important;
+}
+#graph{
+  max-width: 1000px;
 }
