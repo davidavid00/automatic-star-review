@@ -41,6 +41,25 @@ After optimisation and evaluation of each model, we selected the linear regressi
 
 ### Instructions to run the programme
 1. Activate your virtual environment
-2. In Git Bash, cd to the directory in which run.sh file is located on your local computer
-3. Open the app.py file and uncomment lines 26-51 (if running the flask for the first time)
-4. Enter "chome a+x run.sh" (if running the flask for the first time) and then "./run.sh" to run the flask
+2. Ensure the below modules are installed:
+    from nltk.sentiment.vader import SentimentIntensityAnalyzer
+    import string
+    import pandas as pd
+    from nltk.corpus import stopwords
+    import json
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import matplotlib
+    matplotlib.use('Agg')
+    sid = SentimentIntensityAnalyzer()
+    from nltk.tokenize import word_tokenize
+    import os
+    from joblib import load
+    import warnings
+    warnings.filterwarnings("ignore")
+    from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+    from flask import (Flask, jsonify, render_template, request, redirect)
+3. In Git Bash, cd to the directory in which run.sh file is located on your local computer
+4. Open the app.py file and uncomment lines 26-51 (if running the flask for the first time)
+5. Enter "chmod a+x run.sh" (if running the flask for the first time) and then "./run.sh" to run the flask
+
