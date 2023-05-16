@@ -35,7 +35,12 @@ Several different models were used:
 4. Linear Regression
 5. Naive Bayes Multinomial
 
-After optimisation and evaluation of each model, we selected the linear regression model as the best machine learning model in this case. This is because although the SVM model gives better accuracy, precision and recall scores, the SVM joblib file is too big to load with Flask API. The linear regression model with an accuracy score of 0.76 and balanced precision and recall scores for each cetegory is then our best model. The below is a screenshot for the classification report of the linear regression model.
+After optimisation and evaluation of each model, we selected the linear regression model as the best machine learning model in this case. This is because although the SVM model gives better accuracy, precision and recall scores, the SVM joblib file is too big to load with Flask API. The linear regression model with an accuracy score of 0.76 and balanced precision and recall scores for each cetegory is then our best model.
+
+### Summary
+AutoRator has an accuracy score of 0.76. For our use case, this level of accuracy is acceptable. Recall and precision scores are 0.70 or higher except for the recall score of 0.67 of the neutral category. This means that the model is relatively weaker in classifying a truly neutral comment accurately.
+
+The below is a screenshot for the classification report of the linear regression model.
 
 ![Screenshot 2023-05-15 at 7 57 09 pm](https://github.com/davidj00/automatic-star-review/assets/115685811/bf7d0902-f1af-4ce5-8386-e5baa72d3f47)
 
