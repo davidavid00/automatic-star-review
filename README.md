@@ -6,7 +6,7 @@ Very often people are asked to give star reviews and/or comments on goods and se
 Here comes AutoRator, a machine learning-based rater that analyses the sentiment of a comment and categorises it as a positive, neutral or negative comment. In this way, rather than letting the user rate whether their experience is positive, negative or neutral, the user needs to write a comment and AutoRator automatically rates whether it is positive, neutral or negative.
 
 ### Content
-AutoRator comes in the form of a webpage and focuses only on restaurant reviews. The webpage has a welcome page with an "open popup" button. Once the popup button is clicked, a popup page appears and there are options to select the restaurant needed 
+AutoRator comes in the form of a webpage and focuses only on restaurant reviews. The webpage has a welcome page with a "leave a review" button. Once the button is clicked, a popup page appears and there are options to select the desired restaurant and leave a comment. After a comment is submitted, two pictures would appear: a) a graph with Emolex data for the comments extracted from Google reviews for the user-selected restaurant and b) a word cloud graphic that is based on the comments extracted from Google reviews for the user-selected restaurant.
 
 ### Development
 There are several stages to developing AutoRator:
@@ -19,8 +19,8 @@ There are several stages to developing AutoRator:
 7. Selected the best model.
 8. Set up the flask API to run the webpage.
 9. Downloaded and modified a bootscrap template and then designed the webpage on that basis.
-10. Developed the Emolex calculator and designed a graph that presents Emolex data for the comments extracted from Google reviews for a user-selected restaurant.
-11. Produced a word cloud graphic that is based on the comments extracted from Google reviews for a user-selected restaurant.
+10. Developed the Emolex calculator and designed the graph that presents Emolex data.
+11. Produced the word cloud graphic.
 
 ### Data sources
 1. Yelp Reviews
@@ -35,12 +35,12 @@ Several different models were used:
 4. Linear Regression
 5. Naive Bayes Multinomial
 
-After optimisation and evaluation of each model, we selected the linear regression model as the best machine learning model in this case, with an accuracy score of 0.76 and more balanced, well-rounded precisiona and recall scores for each cetegory of "positive", "neutral", "negative".
+After optimisation and evaluation of each model, we selected the linear regression model as the best machine learning model in this case. This is because although the SVM model gives better accuracy, precision and recall scores, the SVM joblib file is too big to load with Flask API. The linear regression model with an accuracy score of 0.76 and balanced precision and recall scores for each cetegory is then our best model. The below is a screenshot for the classification report of the linear regression model.
 
 ![Screenshot 2023-05-15 at 7 57 09 pm](https://github.com/davidj00/automatic-star-review/assets/115685811/bf7d0902-f1af-4ce5-8386-e5baa72d3f47)
 
 ### Instructions to run the programme
 1. Activate your virtual environment
-2. Pip install ?? module
-3. In Git Bash, cd to the directory in which run.sh file is located on your local computer
+2. In Git Bash, cd to the directory in which run.sh file is located on your local computer
+3. Open the app.py file and uncomment lines 26-51 (if running the flask for the first time)
 4. Enter "chome a+x run.sh" (if running the flask for the first time) and then "./run.sh" to run the flask
