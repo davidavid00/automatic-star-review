@@ -93,15 +93,6 @@ form.addEventListener('submit', (event) => {
           const modalBody = document.querySelector('.modal-body');
           const submit_button = document.getElementById('submitButton');
 
-          // Create image elements
-          const image1 = document.createElement('img');
-          image1.src = "emotions.png";
-          image1.alt = 'Image 1';
-
-          const image2 = document.createElement('img');
-          image2.src = "emotions.png"; //to update with wordcloud
-          image2.alt = 'Image 2';
-
           restaurantNameInput.remove();  // Remove restaurantNameInput element
           placeIdInput.remove();         // Remove placeIdInput element
           review_html.remove();
@@ -132,11 +123,3 @@ function updateTitle(value) {
   // Replace the text content of the modal title
   modalTitle.textContent = "Your review was considered " + value;
 }
-
-//Function to send textarea data to flask
-// function test_func () {
-//   let input_data = document.getElementById('review_input').value;
-//   console.log(input_data);
-// }
-
-//Function for loading image

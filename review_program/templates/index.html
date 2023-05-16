@@ -1,73 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Rare Animal Sighting</title>
-    <!-- <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    /> -->
-    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cabin+Sketch&family=Edu+NSW+ACT+Foundation:wght@600&family=Exo+2:ital,wght@1,300&display=swap" />
-    <link rel="stylesheet" href="../static/css/style.css" />
-
-    <script type="text/javascript" src="../static/js/leaflet-heat.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
-  </head>
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <h1>Rare Sightings in NSW</h1>
-          <p>Use the dropdown menu below to select an animal:</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <div class="text-center">
-            <select id="selDataset">
-              <option value="" disabled selected>Choose an animal</option>
-            </select>
-            <div class="row">
-              <div class="col-md-12">
-                <h2>Sighting!</h2>
-                <p id="totalSightings">
-                  Total sightings will be displayed here after an animal is
-                  selected
-                </p>
-                <div class="map-container">
-                  <div id="map-plot"></div>
-                  <div id="myChart"></div>
-                  <div class="gauge">
-                    <div class="chartBox2">
-                      <canvas id="gauge"></canvas>
-                    </div>
-                  </div>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Auto-star Review</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../static/css/styles.css" rel="stylesheet" />
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8RgF_RElvys5DX5KG7bMK6AtqP4ABb0&libraries=places"></script>
+      </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-light bg-dark static-top">
+            <div class="container">
+                <a class="navbar-brand" href="#!"></a>
+                <button id="popup-btn" class="btn btn-primary">Leave a review</button>
+            </div>
+        </nav>
+        <!-- Popup window -->
+        <div id="popup" class="modal">
+          <div class="modal-dialog" style="width: 200%;">
+            <div class="modal-content">
+              <form id="myForm" method="post">
+                <div class="modal-header">
+                  <h5 class="modal-title">Enter your review:</h5>
+                  <!-- Close popup-->
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-              </div>
+
+                <div class="modal-body">
+                  <div id="search-box">
+                    <input id="restaurant_name" type="text" placeholder="Enter a restaurant name">
+                    <input id="place-id" type="hidden" value="">
+                  </div>
+                  <textarea id="review_input" name="input2" rows="8" placeholder="Leave your review here..."></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button id="submitButton" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row"></div>
-    </div>
-    <div class="button-container">
-      <h3><a href="/send">Add your sightings here!</a></h3>
-    </div>
 
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"
-    ></script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../static/js/app.js"></script>
-    <!-- <script src="../static/js/map.js"></script> -->
-    <!-- <script src="../static/js/bar.js"></script> -->
-    <!-- <script src="../static/js/gauge.js"></script> -->
-  </body>
+        <!-- Icons Grid-->
+        <!-- <section class="features-i cons bg-light text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
+                            <h3>Fully Responsive</h3>
+                            <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
+                            <h3>Bootstrap 5 Ready</h3>
+                            <p class="lead mb-0">Featuring the latest build of the new Bootstrap 5 framework!</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
+                            <h3>Easy to Use</h3>
+                            <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
+                        </div>
+                    </div>
+                </div>
+            </div-->
+        <!-- </section> -->
+        <!-- Image Showcases-->
+        <section class="showcase">
+          <div class="container-fluid p-0">
+              <div class="row g-0">
+                  <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('../static/assets/img/istockphoto-1295387240-612x612.jpg')"></div>
+                  <div class="col-lg-6 order-lg-1 text-white showcase-img" style="background-color: black; background-image: url('../static/assets/img/autorator_logo.png')"></div>
+              </div>
+              <div class="row g-0">
+                  <div class="col-lg-6 text-light showcase-img" style="background-image: url('../static/assets/img/istockphoto-1081422898-612x612.jpg')"></div>
+                  <div class="col-lg-6 order-lg-1 text-light showcase-text" style="background-color: black; display: flex; flex-direction: column; align-items: flex-start; justify-content: center;">
+                      <h2>AI GENERATED REVIEWS</h2>
+                      <p class="lead mb-0">Let use decide the star rating on your review. <br>Simply complete the input field and we will determine what star to give to the establishment based on your feedback!</p>
+                  </div>
+              </div>
+              <div class="row g-0">
+                  <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('../static/assets/img/istockphoto-983970694-612x612.jpg')"></div>
+                  <div class="col-lg-6 order-lg-1 text-white showcase-text" style="background-color: black; display: flex; flex-direction: column; align-items: flex-start; justify-content: center;">
+                      <h2>DESIGNED TO GENERATE STAR RATINGS BASED ON EMOTION</h2>
+                      <p class="lead mb-0">We take the emotional value of the words used in feedback to create an accurate star rating that aligns with how you feel!</p>
+                  </div>
+              </div>
+          </div>
+      </section>
+        <!-- Call to Action-->
+        <section class="call-to-action text-white text-center" id="signup">
+          <div class="container position-relative">
+              <div class="row justify-content-center">
+                  <div class="col-xl-6">
+                      <h2 class="mb-4">Ready to get started? Sign up now!</h2>
+                      <!-- Signup form-->
+                      <!-- * * * * * * * * * * * * * * *-->
+                      <!-- * * SB Forms Contact Form * *-->
+                      <!-- * * * * * * * * * * * * * * *-->
+                      <!-- This form is pre-integrated with SB Forms.-->
+                      <!-- To make this form functional, sign up at-->
+                      <!-- https://startbootstrap.com/solution/contact-forms-->
+                      <!-- to get an API token!-->
+                      <form class="form-subscribe" id="contactFormFooter" data-sb-form-api-token="API_TOKEN">
+                          <!-- Email address input-->
+                          <div class="row">
+                              <div class="col">
+                                  <input class="form-control form-control-lg" id="emailAddressBelow" type="email" placeholder="Email Address" data-sb-validations="required,email" />
+                                  <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:required">Email Address is required.</div>
+                                  <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:email">Email Address Email is not valid.</div>
+                              </div>
+                              <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
+                          </div>
+                          <!-- Submit success message-->
+                          <!---->
+                          <!-- This is what your users will see when the form-->
+                          <!-- has successfully submitted-->
+                          <div class="d-none" id="submitSuccessMessage">
+                              <div class="text-center mb-3">
+                                  <div class="fw-bolder">Form submission successful!</div>
+                                  <p>To activate this form, sign up at</p>
+                                  <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                              </div>
+                          </div>
+                          <!-- Submit error message-->
+                          <!---->
+                          <!-- This is what your users will see when there is-->
+                          <!-- an error submitting the form-->
+                          <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </section>
+              <!-- Testimonials -->
+              <section class="testimonials text-center text-light bg-dark">
+                  <div class="container">
+                      <h2 class="mb-5">What people are saying...</h2>
+                      <div class="row">
+                          <div class="col-lg-4">
+                              <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                  <img class="img-fluid rounded-circle mb-3" src="../static/assets/img/testimonials-1.jpg" alt="..." />
+                                  <h5>Mary</h5>
+                                  <p class="font-weight-light mb-0">"This is fantastic! Thanks so much guys!"</p>
+                              </div>
+                          </div>
+                          <div class="col-lg-4">
+                              <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                  <img class="img-fluid rounded-circle mb-3" src="../static/assets/img/testimonials-2.jpg" alt="..." />
+                                  <h5>George</h5>
+                                  <p class="font-weight-light mb-0">"I can't believe the accuracy, well done team."</p>
+                              </div>
+                          </div>
+                          <div class="col-lg-4">
+                              <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                  <img class="img-fluid rounded-circle mb-3" src="../static/assets/img/testimonials-3.jpg" alt="..." />
+                                  <h5>Natasha</h5>
+                                  <p class="font-weight-light mb-0">"I thought for sure that it wouldn't work.  I was pleasantly surprised."</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+      <!-- Footer-->
+        <!-- <footer class="footer bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+                        <ul class="list-inline mb-2">
+                            <li class="list-inline-item"><a href="#!">About</a></li>
+                            <li class="list-inline-item">⋅</li>
+                            <li class="list-inline-item"><a href="#!">Contact</a></li>
+                            <li class="list-inline-item">⋅</li>
+                            <li class="list-inline-item"><a href="#!">Terms of Use</a></li>
+                            <li class="list-inline-item">⋅</li>
+                            <li class="list-inline-item"><a href="#!">Privacy Policy</a></li>
+                        </ul>
+                        <p class="text-muted small mb-4 mb-lg-0">&copy; Your Website 2023. All Rights Reserved.</p>
+                    </div>
+                    <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item me-4">
+                                <a href="#!"><i class="bi-facebook fs-3"></i></a>
+                            </li>
+                            <li class="list-inline-item me-4">
+                                <a href="#!"><i class="bi-twitter fs-3"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!"><i class="bi-instagram fs-3"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer> -->
+        <!-- Core theme JS-->
+        <script src="../static/js/scripts.js"></script>
+    </body>
 </html>
