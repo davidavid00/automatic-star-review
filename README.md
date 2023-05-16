@@ -47,7 +47,6 @@ After optimisation and evaluation of each model, we selected the linear regressi
   - import pandas as pd
   - from nltk.corpus import stopwords
   - import json
-  - import pandas as pd
   - import matplotlib.pyplot as plt
   - import matplotlib
   - matplotlib.use('Agg')
